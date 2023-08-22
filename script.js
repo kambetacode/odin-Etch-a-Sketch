@@ -1,49 +1,47 @@
+const DEFAULT_SIZE = 16
+
 const container = document.querySelector('#container');
 const subContainer = document.getElementById('sub-container');
-const gridNumber = parseInt(prompt('Enter the size of your sketch in pixels'))
+const slider = document.getElementById('size-slider')
 let rows;
-let isDrawing = false;
+let newSize = slider.onchange = (e) => console.log(e.target.value)
 
-function makeRows(rowNum) {
-    for (let i = 0; i < rowNum; i++) {
-          let square = document.createElement('div');
-          square.className = 'gridRow';
-          square.setAttribute('id', 'gridRow')
-          subContainer.appendChild(square);
-      }
-}
+document.documentElement.style.setProperty('--grid-number', DEFAULT_SIZE); 
 
-function toClone(times) {
-    for(let i = 1; i < times; i++ ) {
-        let clone = subContainer.cloneNode(true);
-        container.appendChild(clone)
+function createGrid() {
+    for (let row = 0; row < DEFAULT_SIZE; row++) {
+        for (let col = 0; col < DEFAULT_SIZE; col++) {
+            let cell = document.createElement('div');
+            cell.className = 'gridCell'; 
+            subContainer.appendChild(cell);
+        }
     }
 }
 
+let isDrawing = false;
+document.body.onmousedown = () => (isDrawing = true);
+document.body.onmouseup = () => (isDrawing = false);
+
+
 function defaultGrid() {
-    makeRows(gridNumber)
-    toClone(gridNumber)
+    createGrid()
 
-    rows = document.querySelectorAll('.gridRow');
+    rows = document.querySelectorAll('.gridCell');
 
-    rows.forEach(row => {
-        row.addEventListener('mousedown', () => {
-            isDrawing = true;
-            row.classList.add('hovered');
-        })
-
-        row.addEventListener('mousemove', () => {
+    rows.forEach(cell => {
+        cell.addEventListener('mouseover', (e) => {
             if(isDrawing) {
-            row.classList.add('hovered');
+                e.target.classList.add('hovered')
+                e.preventDefault()
             }
-        })
-
-        row.addEventListener('mouseup', () => {
-            isDrawing = false;
-        })
-
-        
-    })
+        });
+        cell.addEventListener('mousedown', (e) => {
+                e.target.classList.add('hovered')
+                e.preventDefault()
+        });
+    });
 }
 
 defaultGrid()
+
+console.log(isDrawing)
