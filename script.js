@@ -4,16 +4,21 @@ const container = document.querySelector('#container');
 const subContainer = document.getElementById('sub-container');
 const slider = document.getElementById('size-slider')
 const erase = document.getElementById('erase')
+const sizeLabel = document.getElementById('size-label')
 let rows;
 
+sizeLabel.innerHTML = `${DEFAULT_SIZE} x ${DEFAULT_SIZE}`
+
 slider.onchange = (e) => {
+    sizeLabel.innerHTML = `${e.target.value} x ${e.target.value}`
     clearGrid()
     createGrid(e.target.value)
+
 }
 
-erase.onclick = (e) => {
+erase.onclick = () => {
     clearGrid()
-    createGrid(DEFAULT_SIZE)
+    createGrid(slider.value)
 }
 
 function clearGrid() {
