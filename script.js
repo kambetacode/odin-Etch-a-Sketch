@@ -3,19 +3,34 @@ const DEFAULT_SIZE = 16
 const container = document.querySelector('#container');
 const subContainer = document.getElementById('sub-container');
 const slider = document.getElementById('size-slider')
+const erase = document.getElementById('erase')
 let rows;
-let newSize = slider.onchange = (e) => console.log(e.target.value)
 
-document.documentElement.style.setProperty('--grid-number', DEFAULT_SIZE); 
+slider.onchange = (e) => {
+    clearGrid()
+    createGrid(e.target.value)
+}
 
-function createGrid() {
-    for (let row = 0; row < DEFAULT_SIZE; row++) {
-        for (let col = 0; col < DEFAULT_SIZE; col++) {
+erase.onclick = (e) => {
+    clearGrid()
+    createGrid(DEFAULT_SIZE)
+}
+
+function clearGrid() {
+    subContainer.innerHTML = ''
+}
+
+
+function createGrid(size) {
+    document.documentElement.style.setProperty('--grid-number', size);
+    for (let row = 0; row < size; row++) {
+        for (let col = 0; col < size; col++) {
             let cell = document.createElement('div');
             cell.className = 'gridCell'; 
             subContainer.appendChild(cell);
         }
     }
+    addingEventListeners()
 }
 
 let isDrawing = false;
@@ -23,8 +38,7 @@ document.body.onmousedown = () => (isDrawing = true);
 document.body.onmouseup = () => (isDrawing = false);
 
 
-function defaultGrid() {
-    createGrid()
+function addingEventListeners() {
 
     rows = document.querySelectorAll('.gridCell');
 
@@ -42,6 +56,5 @@ function defaultGrid() {
     });
 }
 
-defaultGrid()
 
-console.log(isDrawing)
+createGrid(DEFAULT_SIZE)
